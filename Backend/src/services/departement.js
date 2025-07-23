@@ -8,7 +8,8 @@ export const DepartmentService = {
           divisions: {
             select: {
               id: true,
-              name: true
+              name: true,
+              description: true
             }
           }, 
           users: {
@@ -41,7 +42,8 @@ export const DepartmentService = {
           divisions: {
             select: {
               id: true,
-              name: true
+              name: true,
+              description: true
             }
           }, 
           users: {
@@ -74,7 +76,10 @@ export const DepartmentService = {
   async create(data) {
     try {
       return await prisma.department.create({ 
-        data: data,
+        data: {
+          ...data,
+          createdAt: new Date()
+        },
         include: {
           _count: {
             select: {
@@ -96,12 +101,16 @@ export const DepartmentService = {
     try {
       return await prisma.department.update({
         where: { id: Number(id) },
-        data: data,
+        data: {
+          ...data,
+          updatedAt: new Date()
+        },
         include: {
           divisions: {
             select: {
               id: true,
-              name: true
+              name: true,
+              description: true
             }
           },
           _count: {

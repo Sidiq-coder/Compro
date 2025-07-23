@@ -96,28 +96,6 @@ export const createUser = async (data) => {
       throw new Error('Role tidak valid');
     }
 
-    // Validasi departement exists jika ada
-    if (data.departmentId) {
-      const department = await prisma.department.findUnique({
-        where: { id: parseInt(data.departmentId) }
-      });
-      
-      if (!department) {
-        throw new Error('Departemen tidak ditemukan');
-      }
-    }
-
-    // Validasi division exists jika ada
-    if (data.divisionId) {
-      const division = await prisma.division.findUnique({
-        where: { id: parseInt(data.divisionId) }
-      });
-      
-      if (!division) {
-        throw new Error('Divisi tidak ditemukan');
-      }
-    }
-
     // Hash password before saving
     const hashedPassword = await bcrypt.hash(data.password, SALT_ROUNDS);
     
@@ -148,9 +126,6 @@ export const createUser = async (data) => {
     if (error.code === 'P2002') {
       throw new Error('Email sudah terdaftar');
     }
-    if (error.code === 'P2003') {
-      throw new Error('Department atau Division yang direferensikan tidak ditemukan');
-    }
     throw new Error(`Gagal membuat user: ${error.message}`);
   }
 };
@@ -160,28 +135,6 @@ export const updateUser = async (id, data, currentUser = null) => {
     // Validasi role jika sedang diubah
     if (data.role && !userRoles.includes(data.role)) {
       throw new Error('Role tidak valid');
-    }
-
-    // Validasi departement exists jika sedang diubah
-    if (data.departmentId !== undefined && data.departmentId !== null) {
-      const department = await prisma.department.findUnique({
-        where: { id: parseInt(data.departmentId) }
-      });
-      
-      if (!department) {
-        throw new Error('Departemen tidak ditemukan');
-      }
-    }
-
-    // Validasi division exists jika sedang diubah
-    if (data.divisionId !== undefined && data.divisionId !== null) {
-      const division = await prisma.division.findUnique({
-        where: { id: parseInt(data.divisionId) }
-      });
-      
-      if (!division) {
-        throw new Error('Divisi tidak ditemukan');
-      }
     }
 
     // Hash password if it's being updated
@@ -219,9 +172,6 @@ export const updateUser = async (id, data, currentUser = null) => {
     }
     if (error.code === 'P2002') {
       throw new Error('Email sudah terdaftar');
-    }
-    if (error.code === 'P2003') {
-      throw new Error('Department atau Division yang direferensikan tidak ditemukan');
     }
     throw new Error(`Gagal mengupdate user: ${error.message}`);
   }

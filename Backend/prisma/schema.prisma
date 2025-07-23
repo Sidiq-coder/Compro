@@ -33,14 +33,10 @@ model User {
 }
 
 model Department {
-  id        Int      @id @default(autoincrement())
-  name      String
-  users     User[]
+  id       Int      @id @default(autoincrement())
+  name     String
+  users    User[]
   divisions Division[]
-  createdBy Int?
-  createdAt DateTime @default(now())
-  updatedBy Int?
-  updatedAt DateTime @updatedAt
 }
 
 model Division {
@@ -49,10 +45,6 @@ model Division {
   departmentId Int
   department   Department @relation(fields: [departmentId], references: [id])
   users        User[]
-  createdBy    Int?
-  createdAt    DateTime @default(now())
-  updatedBy    Int?
-  updatedAt    DateTime @updatedAt
 }
 
 model Article {

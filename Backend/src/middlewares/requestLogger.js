@@ -4,20 +4,18 @@ import logger from '../utils/logger.js';
 
 const requestLogger = pinoHttp({
   logger,
-  customLogLevel(res, err) {
+  customLogLevel(req, res, err) {
     if (err) return 'error';
     if (!res.statusCode || res.statusCode >= 500) return 'error';
     if (res.statusCode >= 400) return 'warn';
     return 'info';
   },
-  customSuccessMessage(res) {
-    const req = res.req || {};
-    return `✅ ${req.method || 'UNKNOWN'} ${req.url || '/'} - ${res.statusCode || 200}`;
+  customSuccessMessage(req, res) {
+    return `${req.method || 'UNKNOWN'} ${req.url || req.originalUrl || '/'} - ${res.statusCode || 200}`;
   },
-  customErrorMessage(err, res) {
-    const req = res?.req || {};
+  customErrorMessage(req, res, err) {
     const status = res?.statusCode || err.status || 500;
-    return `[ERROR] ${req.method || 'UNKNOWN'} ${req.url || '/'} - ${status} - ${err.message || err.toString()}`;
+    return `${req.method || 'UNKNOWN'} ${req.url || req.originalUrl || '/'} - ${status} - ${err.message || err.toString()}`;
   }
 });
 

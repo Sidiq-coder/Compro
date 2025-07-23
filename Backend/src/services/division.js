@@ -8,7 +8,8 @@ export const DivisionService = {
           department: {
             select: {
               id: true,
-              name: true
+              name: true,
+              description: true
             }
           }, 
           users: {
@@ -40,7 +41,8 @@ export const DivisionService = {
           department: {
             select: {
               id: true,
-              name: true
+              name: true,
+              description: true
             }
           }, 
           users: {
@@ -85,13 +87,15 @@ export const DivisionService = {
       return await prisma.division.create({ 
         data: {
           ...data,
-          departmentId: data.departmentId ? Number(data.departmentId) : null
+          departmentId: data.departmentId ? Number(data.departmentId) : null,
+          createdAt: new Date()
         },
         include: {
           department: {
             select: {
               id: true,
-              name: true
+              name: true,
+              description: true
             }
           },
           _count: {
@@ -129,13 +133,15 @@ export const DivisionService = {
         where: { id: Number(id) },
         data: {
           ...data,
-          departmentId: data.departmentId ? Number(data.departmentId) : undefined
+          departmentId: data.departmentId ? Number(data.departmentId) : undefined,
+          updatedAt: new Date()
         },
         include: {
           department: {
             select: {
               id: true,
-              name: true
+              name: true,
+              description: true
             }
           },
           _count: {
