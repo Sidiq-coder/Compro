@@ -2,13 +2,18 @@
 
 # Variabel untuk menyimpan token
 @baseUrl = http://localhost:5000/api
-@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb2huLmRkb2ZlZWhqQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUzMTk5OTAzLCJleHAiOjE3NTMyMDM1MDN9.mUu51MYOX5s9M4MkJrduAx-7MkR0EZ4Miwu7HXVqlU0
+@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb2huLmRkb2ZlZWhqQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUzMjg0OTMwLCJleHAiOjE3NTMyODg1MzB9.aicCb_AzAYlrmGUI4iZfJXHkARh8lCFWyYKm3vwTviE
 @pengurusToken = YOUR_PENGURUS_TOKEN_HERE
 @anggotaToken = YOUR_ANGGOTA_TOKEN_HERE
 
 ### 1. GET Users - Tanpa Authentication (Public Access)
 GET {{baseUrl}}/users
 Content-Type: application/json
+
+###
+GET http://localhost:5000/api/divisions
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
 
 ### 2. GET Users - Dengan Authentication sebagai Admin (Bisa lihat level lebih rendah)
 GET {{baseUrl}}/users
@@ -153,7 +158,7 @@ Content-Type: application/json
 Authorization: Bearer {{adminToken}}
 
 {
-  "departmentId": 2
+  "departmentId": 1
 }
 
 ### Expected Results:
