@@ -9,9 +9,10 @@ import { notFound } from './middlewares/notfound.js';
 import userRoutes from './routes/user.js';
 import departmentRoute from "./routes/departement.js";
 import divisionRoute from "./routes/division.js";
-import authRoutes from './routes/auth.js';
 import requestLogger from './middlewares/requestLogger.js';
 import { apiLimiter } from './middlewares/rateLimitter.js';
+import authRoutes from './routes/auth.js';
+import articleRoutes from './routes/article.js';
 
 
 const app = express();
@@ -31,6 +32,8 @@ app.use('/api/users', userRoutes);
 app.use("/api/departments", departmentRoute);
 app.use("/api/divisions", divisionRoute);
 app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/articles', articleRoutes);
 
 
 app.use(notFound);

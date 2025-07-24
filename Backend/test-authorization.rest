@@ -2,7 +2,7 @@
 
 # Variabel untuk menyimpan token
 @baseUrl = http://localhost:5000/api
-@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb2huLmRkb2ZlZWhqQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUzMjg0OTMwLCJleHAiOjE3NTMyODg1MzB9.aicCb_AzAYlrmGUI4iZfJXHkARh8lCFWyYKm3vwTviE
+@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb2huLmRkb2ZlZWhqQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUzMzYzNTc2LCJleHAiOjE3NTMzNjcxNzZ9.Tq_Nq1Zei3ou5ynGnx9FdxueD38HKQ6T-K6WWbClXF8
 @pengurusToken = YOUR_PENGURUS_TOKEN_HERE
 @anggotaToken = YOUR_ANGGOTA_TOKEN_HERE
 
@@ -11,9 +11,31 @@ GET {{baseUrl}}/users
 Content-Type: application/json
 
 ###
-GET http://localhost:5000/api/divisions
+GET http://localhost:5000/api/departments/3
 Content-Type: application/json
 Authorization: Bearer {{adminToken}}
+
+###
+GET http://localhost:5000/api/divisions/1
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+###
+GET http://localhost:5000/api/articles
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+###
+POST http://localhost:5000/api/articles
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "title": "Test Article",
+  "content": "This is a test article for authorization testing.",
+  "status": "draft",             
+  "authorId": 1     
+}
 
 ### 2. GET Users - Dengan Authentication sebagai Admin (Bisa lihat level lebih rendah)
 GET {{baseUrl}}/users

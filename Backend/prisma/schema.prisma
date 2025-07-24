@@ -37,6 +37,7 @@ model Department {
   name     String
   users    User[]
   divisions Division[]
+  articlePermissions ArticlePermission[]
 }
 
 model Division {
@@ -133,4 +134,14 @@ enum OrderStatus {
 enum ArticleStatus {
   draft
   published
+}
+
+model ArticlePermission {
+  id           Int        @id @default(autoincrement())
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId Int
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([departmentId])
 }

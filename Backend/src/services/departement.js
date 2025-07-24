@@ -8,8 +8,7 @@ export const DepartmentService = {
           divisions: {
             select: {
               id: true,
-              name: true,
-              description: true
+              name: true
             }
           }, 
           users: {
@@ -42,8 +41,7 @@ export const DepartmentService = {
           divisions: {
             select: {
               id: true,
-              name: true,
-              description: true
+              name: true
             }
           }, 
           users: {
@@ -109,8 +107,7 @@ export const DepartmentService = {
           divisions: {
             select: {
               id: true,
-              name: true,
-              description: true
+              name: true
             }
           },
           _count: {
