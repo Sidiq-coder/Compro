@@ -14,30 +14,36 @@ datasource db {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   name         String
-  email        String   @unique
+  email        String        @unique
   password     String
   role         Role
   departmentId Int?
   divisionId   Int?
-  department   Department? @relation(fields: [departmentId], references: [id])
-  division     Division?   @relation(fields: [divisionId], references: [id])
+  department   Department?   @relation(fields: [departmentId], references: [id])
+  division     Division?     @relation(fields: [divisionId], references: [id])
   articles     Article[]
-  events       Event[]     @relation("CreatedEvents")
+  events       Event[]       @relation("CreatedEvents")
   attendances  Attendance[]
   products     Product[]
-  refreshToken   String?  @db.Text
-  lastLoginAt    DateTime?
+  refreshToken String?       @db.Text
+  lastLoginAt  DateTime?
   passwordChangedAt DateTime?
+  canCreateEvents Boolean    @default(false)
+
+  // Opposite relation for Attendance.validatedBy
+  validatedAttendances Attendance[] @relation("ValidatedAttendances")
+  
 }
 
 model Department {
-  id       Int      @id @default(autoincrement())
+   id       Int           @id @default(autoincrement())
   name     String
   users    User[]
   divisions Division[]
   articlePermissions ArticlePermission[]
+  allowedEvents Event[]  @relation("EventAllowedDepartments")
 }
 
 model Division {
@@ -64,29 +70,43 @@ model Article {
 
 
 model Event {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  location    String
-  startTime   DateTime
-  endTime     DateTime
-  isPublic    Boolean  @default(true)
-  createdBy   User     @relation("CreatedEvents", fields: [createdById], references: [id])
-  createdById Int
-  attendances Attendance[]
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String
+  location     String
+  startTime    DateTime
+  endTime      DateTime
+  eventType    EventType     @default(internal)
+  isPaid       Boolean       @default(false)
+  price        Float?
+  hasRegistration Boolean    @default(false)
+  registrationDeadline DateTime?
+  createdBy    User          @relation("CreatedEvents", fields: [createdById], references: [id])
+  createdById  Int
+  attendances  Attendance[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  allowedDepartments Department[] @relation("EventAllowedDepartments")
 }
 
 model Attendance {
-  id         Int      @id @default(autoincrement())
-  user       User     @relation(fields: [userId], references: [id])
-  userId     Int
-  event      Event    @relation(fields: [eventId], references: [id])
-  eventId    Int
-  proofUrl   String
-  checkedAt  DateTime
-  createdAt  DateTime @default(now())
-}
+  id          Int           @id @default(autoincrement())
+  user        User          @relation(fields: [userId], references: [id])
+  userId      Int
+  event       Event         @relation(fields: [eventId], references: [id])
+  eventId     Int
+  proofUrls   String?       @db.Text // Store as JSON or comma-separated string
+  notes       String?
+  checkedAt   DateTime?
+  validatedAt DateTime?
+  validatedBy User?         @relation("ValidatedAttendances", fields: [validatedById], references: [id])
+  validatedById Int?
+  rejectionReason String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
+  @@unique([userId, eventId])
+}
 model Product {
   id          Int      @id @default(autoincrement())
   name        String
@@ -113,6 +133,16 @@ model Order {
   createdAt    DateTime    @default(now())
 }
 
+model ArticlePermission {
+  id           Int        @id @default(autoincrement())
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId Int
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([departmentId])
+}
+
 enum Role {
   admin
   ketua_umum
@@ -136,12 +166,17 @@ enum ArticleStatus {
   published
 }
 
-model ArticlePermission {
-  id           Int        @id @default(autoincrement())
-  department   Department @relation(fields: [departmentId], references: [id])
-  departmentId Int
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-
-  @@unique([departmentId])
+enum EventType {
+  internal
+  public
 }
+
+enum AttendanceStatus {
+  pending
+  present
+  absent
+  excused
+  rejected
+}
+
+

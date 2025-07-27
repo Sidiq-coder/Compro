@@ -13,6 +13,8 @@ import requestLogger from './middlewares/requestLogger.js';
 import { apiLimiter } from './middlewares/rateLimitter.js';
 import authRoutes from './routes/auth.js';
 import articleRoutes from './routes/article.js';
+import eventRoutes from './routes/event.js';
+import attendanceRoutes from './routes/attendance.js';
 
 
 const app = express();
@@ -34,6 +36,8 @@ app.use("/api/divisions", divisionRoute);
 app.use('/api/auth', authRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/articles', articleRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/attendances', attendanceRoutes);
 
 
 app.use(notFound);
