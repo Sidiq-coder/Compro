@@ -85,8 +85,7 @@ export const DivisionService = {
       return await prisma.division.create({ 
         data: {
           ...data,
-          departmentId: data.departmentId ? Number(data.departmentId) : null,
-          createdAt: new Date()
+          departmentId: data.departmentId ? Number(data.departmentId) : null
         },
         include: {
           department: {

@@ -74,10 +74,7 @@ export const DepartmentService = {
   async create(data) {
     try {
       return await prisma.department.create({ 
-        data: {
-          ...data,
-          createdAt: new Date()
-        },
+        data: data,
         include: {
           _count: {
             select: {

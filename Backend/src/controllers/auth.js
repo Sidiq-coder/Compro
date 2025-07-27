@@ -1,4 +1,4 @@
-import { generateTokens, comparePassword, invalidateTokens } from '../utils/auth.js';
+import { generateTokens, comparePassword, invalidateTokens, verifyToken } from '../utils/auth.js';
 import { prisma } from '../prisma/client.js';
 
 export const login = async (req, res) => {
@@ -37,6 +37,7 @@ export const login = async (req, res) => {
       success: true,
       data: {
         accessToken,
+        refreshToken,
         user: {
           id: user.id,
           name: user.name,
@@ -56,7 +57,8 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    await invalidateTokens(req.user.id);
+    // Pass the current access token to be blacklisted
+    await invalidateTokens(req.user.id, req.token);
     
     res.clearCookie('refreshToken');
     
@@ -65,6 +67,7 @@ export const logout = async (req, res) => {
       message: 'Logout berhasil'
     });
   } catch (error) {
+    console.error('Logout error:', error);
     res.status(500).json({
       success: false,
       message: 'Terjadi kesalahan saat logout'
@@ -112,7 +115,8 @@ export const me = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    // Check from cookies first, then from request body (with safe access)
+    let refreshToken = req.cookies?.refreshToken || (req.body && req.body.refreshToken);
     
     if (!refreshToken) {
       return res.status(401).json({
@@ -121,7 +125,17 @@ export const refreshToken = async (req, res) => {
       });
     }
 
-    const decoded = verifyToken(refreshToken);
+    let decoded;
+    try {
+      decoded = verifyToken(refreshToken);
+    } catch (error) {
+      console.error('Token verification failed:', error.message);
+      return res.status(401).json({
+        success: false,
+        message: 'Refresh token tidak valid atau kadaluarsa'
+      });
+    }
+
     const user = await prisma.user.findUnique({
       where: { id: decoded.id, refreshToken }
     });
@@ -129,7 +143,7 @@ export const refreshToken = async (req, res) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Refresh token tidak valid'
+        message: 'Refresh token tidak valid atau user sudah logout'
       });
     }
 
@@ -149,13 +163,23 @@ export const refreshToken = async (req, res) => {
 
     res.json({
       success: true,
-      data: { accessToken },
+      data: { 
+        accessToken,
+        refreshToken: newRefreshToken,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role
+        }
+      },
       message: 'Token berhasil diperbarui'
     });
   } catch (error) {
+    console.error('Refresh token error:', error);
     res.status(401).json({
       success: false,
-      message: 'Refresh token tidak valid'
+      message: 'Terjadi kesalahan saat memperbarui token'
     });
   }
 };
