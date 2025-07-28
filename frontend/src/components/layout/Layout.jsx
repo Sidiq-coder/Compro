@@ -1,6 +1,6 @@
 import React from 'react';
-import { Header } from './Header';
-import { Footer } from './Footer';
+import  Header  from './Header';
+import  Footer  from './Footer';
 
 const Layout = ({ children }) => {
   return (
@@ -14,4 +14,4 @@ const Layout = ({ children }) => {
   );
 };
 
-export { Layout };
+export default Layout ;

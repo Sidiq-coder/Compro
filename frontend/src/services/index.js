@@ -10,17 +10,20 @@ export const authService = {
   async login(credentials) {
     const response = await api.post('/auth/login', credentials);
     
-    if (response.token) {
-      localStorage.setItem('auth_token', response.token);
-      if (response.refreshToken) {
-        localStorage.setItem('refresh_token', response.refreshToken);
+    // Backend returns data wrapped in { success, data, message }
+    const { data } = response;
+    
+    if (data.accessToken) {
+      localStorage.setItem('auth_token', data.accessToken);
+      if (data.refreshToken) {
+        localStorage.setItem('refresh_token', data.refreshToken);
       }
-      if (response.user) {
-        localStorage.setItem('user_data', JSON.stringify(response.user));
+      if (data.user) {
+        localStorage.setItem('user_data', JSON.stringify(data.user));
       }
     }
     
-    return response;
+    return data;
   },
 
   /**

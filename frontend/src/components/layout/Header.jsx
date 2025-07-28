@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context';
 import { cn } from '../../utils';
 import { ROUTES } from '../../constants';
+import { Button } from '../ui';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isAuthenticated, user, logout, loading } = useAuth();
 
   const navigationItems = [
     { name: 'Home', href: ROUTES.HOME },
@@ -20,6 +24,15 @@ const Header = () => {
     return location.pathname === href;
   };
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate(ROUTES.HOME);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
   return (
     <header className="bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,7 +43,7 @@ const Header = () => {
               <img 
                 className="h-8 w-auto" 
                 src="/logo.png" 
-                alt="Company Logo"
+                alt="Compro Logo"
                 onError={(e) => {
                   e.target.style.display = 'none';
                   e.target.nextSibling.style.display = 'block';
@@ -40,7 +53,7 @@ const Header = () => {
                 className="ml-2 text-xl font-bold text-gray-900 hidden"
                 style={{ display: 'none' }}
               >
-                Company
+                Compro
               </span>
             </Link>
           </div>
@@ -65,18 +78,41 @@ const Header = () => {
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link
-              to={ROUTES.LOGIN}
-              className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Login
-            </Link>
-            <Link
-              to={ROUTES.REGISTER}
-              className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              Register
-            </Link>
+            {isAuthenticated ? (
+              // Authenticated user menu
+              <div className="flex items-center space-x-4">
+                <Link
+                  to={ROUTES.DASHBOARD}
+                  className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Dashboard
+                </Link>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-600">
+                    Halo, {user?.name || user?.email}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleLogout}
+                    loading={loading}
+                    disabled={loading}
+                  >
+                    Logout
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              // Unauthenticated user menu
+              <>
+                <Link
+                  to={ROUTES.LOGIN}
+                  className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Login
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -131,20 +167,42 @@ const Header = () => {
               </Link>
             ))}
             <div className="px-3 py-2 space-y-2">
-              <Link
-                to={ROUTES.LOGIN}
-                className="block w-full text-center px-3 py-2 border border-gray-300 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Login
-              </Link>
-              <Link
-                to={ROUTES.REGISTER}
-                className="block w-full text-center px-3 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-md"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Register
-              </Link>
+              {isAuthenticated ? (
+                // Authenticated mobile menu
+                <>
+                  <Link
+                    to={ROUTES.DASHBOARD}
+                    className="block w-full text-center px-3 py-2 border border-gray-300 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <div className="text-center text-sm text-gray-600 py-1">
+                    Halo, {user?.name || user?.email}
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      handleLogout();
+                    }}
+                    loading={loading}
+                    disabled={loading}
+                  >
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                // Unauthenticated mobile menu
+                <Link
+                  to={ROUTES.LOGIN}
+                  className="block w-full text-center px-3 py-2 border border-gray-300 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Login
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -153,4 +211,4 @@ const Header = () => {
   );
 };
 
-export { Header };
+export  default Header ;

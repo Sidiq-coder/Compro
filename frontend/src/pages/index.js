@@ -1,3 +1,13 @@
 export { default as HomePage } from './HomePage';
 export { default as ContactPage } from './ContactPage';
 export { default as NotFoundPage } from './NotFoundPage';
+export { default as LoginPage } from './LoginPage';
+export { default as DashboardPage } from './DashboardPage';
+export { default as UserManagementPage } from './UserManagementPage';
+export { default as DepartmentPage } from './DepartmentPage';
+export { default as DivisionPage } from './DivisionPage';
+export { default as FinancePage } from './FinancePage';
+export { default as ProductPage } from './ProductPage';
+export { default as ProductDetailPage } from './ProductDetailPage';
+export { default as ArticleManagementPage } from './ArticleManagementPage';
+export { default as EventManagementPage } from './EventManagementPage';

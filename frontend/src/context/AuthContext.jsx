@@ -163,6 +163,7 @@ export const AuthProvider = ({ children }) => {
 
   // Logout function
   const logout = async () => {
+    dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: { loading: true } });
     try {
       await authService.logout();
     } catch (error) {

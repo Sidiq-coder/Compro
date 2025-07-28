@@ -1,8 +1,8 @@
-// API Configuration
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+// Application constants
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 // Application Constants
-export const APP_NAME = 'Company Profile';
+export const APP_NAME = 'Compro Profile';
 export const APP_VERSION = '1.0.0';
 
 // Route Constants
@@ -16,6 +16,14 @@ export const ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
   DASHBOARD: '/dashboard',
+  USERS: '/dashboard/users',
+  DEPARTMENT: '/dashboard/department',
+  DIVISI: '/dashboard/divisi',
+  KEUANGAN: '/dashboard/keuangan',
+  PRODUK: '/dashboard/produk',
+  PRODUCT_DETAIL: '/dashboard/products/:id',
+  ARTICLES: '/dashboard/articles',
+  EVENTS: '/dashboard/events',
   PROFILE: '/profile',
 };
 

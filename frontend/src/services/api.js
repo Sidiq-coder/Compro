@@ -45,7 +45,9 @@ class ApiClient {
       const data = isJson ? await response.json() : await response.text();
 
       if (!response.ok) {
-        throw new Error(data.message || `HTTP error! status: ${response.status}`);
+        // If it's JSON response with error details, extract the message
+        const errorMessage = (isJson && data.message) ? data.message : `HTTP error! status: ${response.status}`;
+        throw new Error(errorMessage);
       }
 
       return data;
