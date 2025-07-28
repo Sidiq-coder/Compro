@@ -84,3 +84,40 @@ export function debounce(func, wait) {
 export function generateId() {
   return Math.random().toString(36).substr(2, 9);
 }
+
+/**
+ * Calculate sales statistics from products data
+ * @param {Array} products - Array of product objects with sales data
+ * @returns {Object} Sales statistics
+ */
+export function calculateSalesStats(products) {
+  if (!products || products.length === 0) {
+    return {
+      totalSales: 0,
+      totalRevenue: 0,
+      averageOrderValue: 0,
+      topSellingProduct: null,
+      salesGrowth: 0
+    };
+  }
+
+  const totalSales = products.reduce((sum, product) => sum + (product.sold || 0), 0);
+  const totalRevenue = products.reduce((sum, product) => sum + (product.revenue || 0), 0);
+  const averageOrderValue = totalSales > 0 ? totalRevenue / totalSales : 0;
+  
+  // Find top selling product
+  const topSellingProduct = products.reduce((top, product) => {
+    return (product.sold || 0) > (top?.sold || 0) ? product : top;
+  }, null);
+
+  // Mock sales growth (in real app, this would compare with previous period)
+  const salesGrowth = 12.5; // +12.5%
+
+  return {
+    totalSales,
+    totalRevenue,
+    averageOrderValue,
+    topSellingProduct,
+    salesGrowth
+  };
+}

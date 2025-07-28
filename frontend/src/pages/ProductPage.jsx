@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context';
 import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../components/layout';
-import { Button, StatsCard, Modal, Input, Alert, TableActions, ProductCard } from '../components/ui';
-import { formatCurrency, calculateProductStats } from '../utils';
+import { Button, StatsCard, Modal, Input, Alert, TableActions, ProductCard, SalesStatsCard } from '../components/ui';
+import { formatCurrency, calculateProductStats, calculateSalesStats } from '../utils';
 
 const ProductPage = () => {
   const { user } = useAuth();
@@ -44,7 +44,10 @@ const ProductPage = () => {
       stock: 25,
       category: 'Apparel',
       status: 'active',
-      image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop&crop=center'
+      image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop&crop=center',
+      sold: 45,
+      revenue: 6750000,
+      lastSold: '2025-07-27'
     },
     { 
       id: 2, 
@@ -54,7 +57,10 @@ const ProductPage = () => {
       stock: 15,
       category: 'Drinkware',
       status: 'active',
-      image: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&h=300&fit=crop&crop=center'
+      image: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&h=300&fit=crop&crop=center',
+      sold: 32,
+      revenue: 2720000,
+      lastSold: '2025-07-26'
     },
     { 
       id: 3, 
@@ -64,7 +70,10 @@ const ProductPage = () => {
       stock: 0,
       category: 'Bags',
       status: 'active',
-      image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop&crop=center'
+      image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop&crop=center',
+      sold: 18,
+      revenue: 1350000,
+      lastSold: '2025-07-20'
     },
     { 
       id: 4, 
@@ -74,7 +83,10 @@ const ProductPage = () => {
       stock: 30,
       category: 'Stationery',
       status: 'active',
-      image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop&crop=center'
+      image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop&crop=center',
+      sold: 67,
+      revenue: 3015000,
+      lastSold: '2025-07-28'
     }
   ];
 
@@ -181,6 +193,9 @@ const ProductPage = () => {
   const productStats = calculateProductStats(products);
   const { totalProducts, activeProducts, totalStock, outOfStockProducts } = productStats;
 
+  // Calculate sales statistics
+  const salesStats = calculateSalesStats(products);
+
   const statsData = [
     {
       title: 'Total Produk',
@@ -226,9 +241,9 @@ const ProductPage = () => {
       <Sidebar />
       
       <div className="flex-1 overflow-auto">
-        <div className="p-8">
+        <div className="p-4 sm:p-6">
           {/* Header */}
-          <div className="mb-8">
+          <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-900">Manajemen Produk</h1>
             <p className="text-gray-600 mt-2">Kelola produk dan inventory e-commerce</p>
           </div>
@@ -245,10 +260,21 @@ const ProductPage = () => {
           )}
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {statsData.map((stat, index) => (
               <StatsCard key={index} {...stat} />
             ))}
+          </div>
+
+          {/* Sales Statistics */}
+          <div className="mb-6">
+            <SalesStatsCard 
+              salesData={salesStats}
+              title="Statistik Penjualan"
+              period="30 Hari Terakhir"
+              showTopProduct={true}
+              showGrowth={true}
+            />
           </div>
 
           {/* Actions */}
@@ -277,7 +303,7 @@ const ProductPage = () => {
           </TableActions>
 
           {/* Products Grid */}
-          <div className="max-w-7xl mx-auto">
+          <div className="w-full">
             {loading ? (
               <div className="flex justify-center items-center py-12">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -290,7 +316,7 @@ const ProductPage = () => {
                 <p className="text-gray-500">Belum ada produk yang ditambahkan atau tidak ada yang sesuai dengan pencarian Anda.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
                 {filteredProducts.map((product) => (
                   <ProductCard
                     key={product.id}

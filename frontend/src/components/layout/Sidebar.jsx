@@ -77,12 +77,6 @@ const Sidebar = () => {
       active: isMenuActive('/dashboard/absensi')
     },
     { 
-      name: 'Analitik', 
-      icon: '📊', 
-      path: '/dashboard/analitik',
-      active: isMenuActive('/dashboard/analitik')
-    },
-    { 
       name: 'Pengaturan', 
       icon: '⚙️', 
       path: '/dashboard/pengaturan',

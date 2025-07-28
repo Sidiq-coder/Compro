@@ -157,9 +157,9 @@ const ProductDetailPage = () => {
       <Sidebar />
       
       <div className="flex-1 overflow-auto">
-        <div className="max-w-7xl mx-auto p-8">
+        <div className="w-full p-4 sm:p-6">
           {/* Header */}
-          <div className="mb-8">
+          <div className="mb-6">
             <div className="flex items-center space-x-4 mb-4">
               <Button
                 variant="outline"
@@ -205,7 +205,7 @@ const ProductDetailPage = () => {
           )}
 
           {/* Product Detail */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Product Images */}
             <div>
               <div className="bg-white rounded-lg shadow-sm border p-6">

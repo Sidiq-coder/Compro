@@ -16,4 +16,5 @@ export { TransactionSearchFilter } from './TransactionSearchFilter';
 export { SearchBarFilter } from './SearchBarFilter';
 export { TableActions } from './TableActions';
 export { ProductCard } from './ProductCard';
+export { default as SalesStatsCard } from './SalesStatsCard';
 export { DataTable } from './DataTable';
