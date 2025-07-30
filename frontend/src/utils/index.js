@@ -1,5 +1,8 @@
 import { clsx } from 'clsx';
 
+// Re-export Excel export utilities
+export * from './excelExport';
+
 // Re-export currency utilities
 export * from './currency';
 

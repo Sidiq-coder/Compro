@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context';
 import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../components/layout';
-import { Button, StatsCard, Modal, Input, Alert, TableActions, ProductCard, SalesStatsCard } from '../components/ui';
+import { Button, StatsCard, Alert, TableActions, ProductCard, SalesStatsCard } from '../components/ui';
 import { formatCurrency, calculateProductStats, calculateSalesStats } from '../utils';
 
 const ProductPage = () => {
@@ -11,20 +11,11 @@ const ProductPage = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [alert, setAlert] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    price: '',
-    stock: '',
-    category: '',
-    status: 'active'
-  });
 
   // Mock data untuk demo
   const mockCategories = [
@@ -108,65 +99,9 @@ const ProductPage = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      if (editingProduct) {
-        // Update product
-        setProducts(prev => 
-          prev.map(product => 
-            product.id === editingProduct.id 
-              ? { 
-                  ...product, 
-                  ...formData, 
-                  price: parseFloat(formData.price),
-                  stock: parseInt(formData.stock),
-                  updatedAt: new Date().toISOString() 
-                }
-              : product
-          )
-        );
-        setAlert({ type: 'success', message: 'Produk berhasil diperbarui!' });
-      } else {
-        // Add new product
-        const newProduct = {
-          id: Date.now(),
-          ...formData,
-          price: parseFloat(formData.price),
-          stock: parseInt(formData.stock),
-          sold: 0,
-          createdAt: new Date().toISOString()
-        };
-        setProducts(prev => [newProduct, ...prev]);
-        setAlert({ type: 'success', message: 'Produk berhasil ditambahkan!' });
-      }
-      
-      setShowModal(false);
-      setEditingProduct(null);
-      setFormData({ name: '', description: '', price: '', stock: '', category: '', status: 'active' });
-    } catch (error) {
-      setAlert({ type: 'error', message: 'Gagal menyimpan produk' });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleEdit = (product) => {
-    setEditingProduct(product);
-    setFormData({
-      name: product.name,
-      description: product.description,
-      price: product.price.toString(),
-      stock: product.stock.toString(),
-      category: product.category,
-      status: product.status
-    });
-    setShowModal(true);
+    // Redirect to edit page (to be implemented)
+    navigate(`/produk/edit/${product.id}`);
   };
 
   const handleDelete = async (id) => {
@@ -286,7 +221,7 @@ const ProductPage = () => {
             onFilterChange={(e) => setCategoryFilter(e.target.value)}
             filterOptions={categories.map(cat => ({ value: cat.name, label: cat.name }))}
             filterPlaceholder="Semua Kategori"
-            onAdd={() => setShowModal(true)}
+            onAdd={() => navigate('/produk/tambah')}
             addButtonText="Tambah Produk"
             addButtonIcon="➕"
           >
@@ -339,125 +274,6 @@ const ProductPage = () => {
           </div>
         </div>
       </div>
-
-      {/* Add/Edit Modal */}
-      <Modal
-        isOpen={showModal}
-        onClose={() => {
-          setShowModal(false);
-          setEditingProduct(null);
-          setFormData({ name: '', description: '', price: '', stock: '', category: '', status: 'active' });
-        }}
-        title={editingProduct ? 'Edit Produk' : 'Tambah Produk'}
-      >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nama Produk
-            </label>
-            <Input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="Masukkan nama produk"
-              required
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Kategori
-            </label>
-            <select
-              value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
-            >
-              <option value="">Pilih Kategori</option>
-              {categories.map(cat => (
-                <option key={cat.id} value={cat.name}>{cat.name}</option>
-              ))}
-            </select>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Deskripsi
-            </label>
-            <textarea
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Masukkan deskripsi produk"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              rows="3"
-              required
-            />
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Harga (Rp)
-              </label>
-              <Input
-                type="number"
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                placeholder="0"
-                min="0"
-                required
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Stok
-              </label>
-              <Input
-                type="number"
-                value={formData.stock}
-                onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                placeholder="0"
-                min="0"
-                required
-              />
-            </div>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Status
-            </label>
-            <select
-              value={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
-            >
-              <option value="active">Aktif</option>
-              <option value="inactive">Tidak Aktif</option>
-            </select>
-          </div>
-          
-          <div className="flex justify-end space-x-2 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                setShowModal(false);
-                setEditingProduct(null);
-                setFormData({ name: '', description: '', price: '', stock: '', category: '', status: 'active' });
-              }}
-            >
-              Batal
-            </Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Menyimpan...' : (editingProduct ? 'Perbarui' : 'Simpan')}
-            </Button>
-          </div>
-        </form>
-      </Modal>
     </div>
   );
 };

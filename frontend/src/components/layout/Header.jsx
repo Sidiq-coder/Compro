@@ -11,12 +11,13 @@ const Header = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user, logout, loading } = useAuth();
 
+  // Public navigation items (for guests/visitors)
   const navigationItems = [
     { name: 'Home', href: ROUTES.HOME },
     { name: 'About', href: ROUTES.ABOUT },
-    { name: 'Services', href: ROUTES.SERVICES },
-    { name: 'Articles', href: ROUTES.ARTICLES },
-    { name: 'Events', href: ROUTES.EVENTS },
+    { name: 'Products', href: ROUTES.PRODUCTS }, // Changed from services to products
+    { name: 'Articles', href: ROUTES.PUBLIC_ARTICLES }, // Public articles, different from dashboard articles
+    { name: 'Events', href: ROUTES.PUBLIC_EVENTS }, // Public events, different from dashboard events  
     { name: 'Contact', href: ROUTES.CONTACT },
   ];
 

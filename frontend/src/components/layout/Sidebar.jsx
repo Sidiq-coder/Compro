@@ -73,14 +73,14 @@ const Sidebar = () => {
     { 
       name: 'Absensi', 
       icon: '⏰', 
-      path: '/dashboard/absensi',
-      active: isMenuActive('/dashboard/absensi')
+      path: ROUTES.ABSENSI,
+      active: isMenuActive(ROUTES.ABSENSI)
     },
     { 
       name: 'Pengaturan', 
       icon: '⚙️', 
-      path: '/dashboard/pengaturan',
-      active: isMenuActive('/dashboard/pengaturan')
+      path: ROUTES.PENGATURAN,
+      active: isMenuActive(ROUTES.PENGATURAN)
     },
   ];
 

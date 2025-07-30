@@ -9,21 +9,25 @@ export const APP_VERSION = '1.0.0';
 export const ROUTES = {
   HOME: '/',
   ABOUT: '/about',
-  SERVICES: '/services',
-  ARTICLES: '/articles',
-  EVENTS: '/events',
+  SERVICES: '/services', // Keep old route for backward compatibility
+  PRODUCTS: '/products', // New public products page
+  PUBLIC_ARTICLES: '/public-articles', // Public articles (different from dashboard)
+  PUBLIC_EVENTS: '/public-events', // Public events (different from dashboard) 
   CONTACT: '/contact',
   LOGIN: '/login',
   REGISTER: '/register',
   DASHBOARD: '/dashboard',
   USERS: '/dashboard/users',
+  ADD_USER: '/pengguna/tambah',
   DEPARTMENT: '/dashboard/department',
   DIVISI: '/dashboard/divisi',
   KEUANGAN: '/dashboard/keuangan',
   PRODUK: '/dashboard/produk',
   PRODUCT_DETAIL: '/dashboard/products/:id',
-  ARTICLES: '/dashboard/articles',
-  EVENTS: '/dashboard/events',
+  ABSENSI: '/dashboard/absensi',
+  PENGATURAN: '/dashboard/pengaturan',
+  ARTICLES: '/dashboard/articles', // Dashboard articles (for logged in users)
+  EVENTS: '/dashboard/events', // Dashboard events (for logged in users)
   PROFILE: '/profile',
 };
 

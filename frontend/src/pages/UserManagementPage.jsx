@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../components/layout';
 import { Button, Input, StatsCard, TableActions, DataTable } from '../components/ui';
 import { createUserTableColumns } from '../utils';
+import { ROUTES } from '../constants';
 
 const UserManagementPage = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRole, setSelectedRole] = useState('Semua Role');
 
@@ -107,7 +110,7 @@ const UserManagementPage = () => {
   });
 
   const handleAdd = () => {
-    console.log('Add new user');
+    navigate(ROUTES.ADD_USER);
   };
 
   const handleEdit = (user) => {
