@@ -24,4 +24,8 @@ export { default as FileUpload } from './FileUpload';
 export { default as Select } from './Select';
 export { default as Textarea } from './Textarea';
 export { default as FormField } from './FormField';
+export { StepIndicator } from './StepIndicator';
+export { DateInput } from './DateInput';
+export { Checkbox } from './Checkbox';
+export { PermissionCard } from './PermissionCard';
 export { default as HeroHeader, CompactHero } from './HeroHeader';
