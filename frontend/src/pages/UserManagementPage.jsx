@@ -122,12 +122,12 @@ const UserManagementPage = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
+      <div className="ml-64">
         {/* Header */}
         <div className="bg-white shadow-sm border-b p-6">
           <div>
@@ -138,8 +138,9 @@ const UserManagementPage = () => {
 
         {/* Content */}
         <div className="w-full p-4 sm:p-6">
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="max-w-7xl mx-auto">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {statsCards.map((card, index) => (
               <StatsCard
                 key={index}
@@ -175,6 +176,7 @@ const UserManagementPage = () => {
             onDelete={handleDelete}
             emptyMessage="Tidak ada pengguna yang ditemukan"
           />
+          </div>
         </div>
       </div>
     </div>

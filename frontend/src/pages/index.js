@@ -16,6 +16,7 @@ export { default as AttendancePage } from './AttendancePage';
 export { default as AttendanceReportPage } from './AttendanceReportPage';
 export { default as ArticleManagementPage } from './ArticleManagementPage';
 export { default as EventManagementPage } from './EventManagementPage';
+export { default as AddEventPage } from './AddEventPage';
 
 // Public pages (for guests/visitors)
 export { default as AboutPage } from './AboutPage';

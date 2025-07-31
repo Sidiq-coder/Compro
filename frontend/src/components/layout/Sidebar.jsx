@@ -85,15 +85,15 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-64 bg-white shadow-sm">
+    <div className="fixed left-0 top-0 w-64 h-full bg-white shadow-sm z-30 flex flex-col">
       {/* Logo */}
-      <div className="p-6 border-b">
+      <div className="p-6 border-b flex-shrink-0">
         <h1 className="text-xl font-bold text-gray-900">ManajemenOrg</h1>
         <p className="text-sm text-gray-500">Sistem Manajemen Organisasi</p>
       </div>
 
       {/* Navigation Menu */}
-      <nav className="mt-6">
+      <nav className="mt-6 flex-1 overflow-y-auto">
         {sidebarMenus.map((menu, index) => (
           <Link
             key={index}
@@ -111,7 +111,7 @@ const Sidebar = () => {
       </nav>
 
       {/* User Profile */}
-      <div className="absolute bottom-0 left-0 right-0 w-64 p-4 border-t bg-white">
+      <div className="p-4 border-t bg-white flex-shrink-0">
         <div className="flex items-center">
           <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
             <span className="text-white font-medium">

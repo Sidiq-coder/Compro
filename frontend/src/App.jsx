@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context';
 import { Layout } from './components/layout';
 import ProtectedRoute from './components/ProtectedRoute';
-import { HomePage, ContactPage, NotFoundPage, LoginPage, DashboardPage, UserManagementPage, AddUserPage, DepartmentPage, DivisionPage, FinancePage, ProductPage, ProductDetailPage, AddProductPage, SettingsPage, AttendancePage, AttendanceReportPage, ArticleManagementPage, EventManagementPage, AboutPage, PublicProductsPage, PublicArticlesPage, PublicEventsPage } from './pages';
+import { HomePage, ContactPage, NotFoundPage, LoginPage, DashboardPage, UserManagementPage, AddUserPage, DepartmentPage, DivisionPage, FinancePage, ProductPage, ProductDetailPage, AddProductPage, SettingsPage, AttendancePage, AttendanceReportPage, ArticleManagementPage, EventManagementPage, AddEventPage, AboutPage, PublicProductsPage, PublicArticlesPage, PublicEventsPage } from './pages';
 import { ROUTES } from './constants';
 
 function App() {
@@ -68,6 +68,11 @@ function App() {
           <Route path={ROUTES.EVENTS} element={
             <ProtectedRoute>
               <EventManagementPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/events/tambah" element={
+            <ProtectedRoute>
+              <AddEventPage />
             </ProtectedRoute>
           } />
           <Route path={ROUTES.ABSENSI} element={

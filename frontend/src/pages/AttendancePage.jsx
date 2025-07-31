@@ -132,43 +132,45 @@ const AttendancePage = () => {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <Sidebar />
       
-      <div className="flex-1 overflow-auto">
-        <div className="w-full p-4 sm:p-6">
-          {/* Header */}
-          <div className="mb-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">Absensi</h1>
-                <p className="text-gray-600 mt-2">Kelola kehadiran dan laporan event</p>
-              </div>
-              <Button
-                onClick={handleExportAllEvents}
-                className="flex items-center space-x-2"
-                disabled={completedEvents.length === 0}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <span>Export Semua</span>
-              </Button>
+      <div className="ml-64">
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Absensi</h2>
+              <p className="text-gray-600">Kelola kehadiran dan laporan event</p>
             </div>
+            <Button
+              onClick={handleExportAllEvents}
+              className="flex items-center space-x-2"
+              disabled={completedEvents.length === 0}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Export Semua</span>
+            </Button>
           </div>
+        </div>
 
-          {/* Alert */}
-          {alert && (
-            <div className="mb-6">
-              <Alert
-                type={alert.type}
-                message={alert.message}
-                onClose={() => setAlert(null)}
-              />
-            </div>
-          )}
+        {/* Content */}
+        <div className="w-full p-4 sm:p-6">
+          <div className="max-w-7xl mx-auto">
+            {/* Alert */}
+            {alert && (
+              <div className="mb-6">
+                <Alert
+                  type={alert.type}
+                  message={alert.message}
+                  onClose={() => setAlert(null)}
+                />
+              </div>
+            )}
 
-          {/* Stats Cards */}
+            {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {statsData.map((stat, index) => (
               <StatsCard key={index} {...stat} />
@@ -195,6 +197,7 @@ const AttendancePage = () => {
                 ))}
               </div>
             )}
+          </div>
           </div>
         </div>
       </div>

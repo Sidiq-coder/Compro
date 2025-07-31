@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../components/layout';
 import { Button, Input, StatsCard, TableActions } from '../components/ui';
+import { ROUTES } from '../constants';
 
 const EventManagementPage = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Semua Kategori');
   const [selectedStatus, setSelectedStatus] = useState('Semua Status');
@@ -105,7 +108,7 @@ const EventManagementPage = () => {
   });
 
   const handleAddEvent = () => {
-    console.log('Add new event');
+    navigate(ROUTES.ADD_EVENT);
   };
 
   const getStatusStyle = (status) => {
@@ -124,12 +127,12 @@ const EventManagementPage = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
+      <div className="ml-64">
         {/* Header */}
         <div className="bg-white shadow-sm border-b p-6">
           <div>
@@ -140,8 +143,9 @@ const EventManagementPage = () => {
 
         {/* Content */}
         <div className="w-full p-4 sm:p-6">
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="max-w-7xl mx-auto">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {statsCards.map((card, index) => (
               <StatsCard
                 key={index}
@@ -247,6 +251,7 @@ const EventManagementPage = () => {
                 </div>
               </div>
             ))}
+          </div>
           </div>
         </div>
       </div>

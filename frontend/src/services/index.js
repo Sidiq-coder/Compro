@@ -180,3 +180,8 @@ export const contactService = {
     return api.post('/contact', messageData);
   },
 };
+
+/**
+ * Exporting eventService
+ */
+export { eventService } from './eventService';

@@ -852,13 +852,13 @@ const AddUserPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <Sidebar />
       
-      <div className="flex-1">
+      <div className="ml-64">
         {/* Header - Full width, aligned left */}
         <div className="w-full bg-white shadow-sm border-b">
-          <div className="px-4 py-6 lg:px-8 lg:py-8 ml-64">
+          <div className="p-6">
             <div className="flex items-center mb-2">
               <button
                 onClick={handleCancel}
@@ -876,8 +876,8 @@ const AddUserPage = () => {
         </div>
 
         {/* Content - With left margin */}
-        <div className="px-2 py-6 lg:px-4 lg:py-8 ml-64">
-          <div className="ml-0">
+        <div className="w-full p-4 sm:p-6">
+          <div className="max-w-7xl mx-auto">
             {/* Alerts */}
             {error && (
               <Alert variant="destructive" className="mb-6">
@@ -892,9 +892,9 @@ const AddUserPage = () => {
             )}
 
             {/* Main Layout - Side by Side */}
-            <div className="flex gap-5 max-w-6xl">
+            <div className="flex gap-8">
               {/* Left Side - Mode Selection Cards */}
-              <div className="w-60 flex-shrink-0">
+              <div className="w-80 flex-shrink-0">
                 <h2 className="text-lg font-semibold text-gray-900 mb-6">Pilih Mode</h2>
                 <div className="space-y-4">
                   {/* Single User Card */}
@@ -906,19 +906,19 @@ const AddUserPage = () => {
                     }`}
                     onClick={() => setAddMode('single')}
                   >
-                    <div className="p-4">
+                    <div className="p-6">
                       <div className="flex items-center mb-3">
-                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                          <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                          <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                           </svg>
                         </div>
                         <div>
                           <h3 className="text-base font-semibold text-gray-900">Tambah Satu Pengguna</h3>
-                          <p className="text-xs text-gray-600">Form wizard detail</p>
+                          <p className="text-sm text-gray-600">Form wizard detail</p>
                         </div>
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-sm text-gray-500">
                         Form dengan validasi lengkap dan input terstruktur
                       </div>
                     </div>
@@ -933,19 +933,19 @@ const AddUserPage = () => {
                     }`}
                     onClick={() => setAddMode('bulk')}
                   >
-                    <div className="p-4">
+                    <div className="p-6">
                       <div className="flex items-center mb-3">
-                        <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
-                          <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                          <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM9 3a2 2 0 11-4 0 2 2 0 014 0z" />
                           </svg>
                         </div>
                         <div>
                           <h3 className="text-base font-semibold text-gray-900">Tambah Banyak Pengguna</h3>
-                          <p className="text-xs text-gray-600">Import dari Excel</p>
+                          <p className="text-sm text-gray-600">Import dari Excel</p>
                         </div>
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-sm text-gray-500">
                         Upload file Excel untuk import massal
                       </div>
                     </div>

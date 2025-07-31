@@ -172,22 +172,26 @@ const ProductPage = () => {
   });
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <Sidebar />
       
-      <div className="flex-1 overflow-auto">
-        <div className="p-4 sm:p-6">
-          {/* Header */}
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">Manajemen Produk</h1>
-            <p className="text-gray-600 mt-2">Kelola produk dan inventory e-commerce</p>
+      <div className="ml-64">
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b p-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Manajemen Produk</h2>
+            <p className="text-gray-600">Kelola produk dan inventory e-commerce</p>
           </div>
+        </div>
 
-          {/* Alert */}
-          {alert && (
-            <div className="mb-6">
-              <Alert
-                type={alert.type}
+        {/* Content */}
+        <div className="p-4 sm:p-6">
+          <div className="max-w-7xl mx-auto">
+            {/* Alert */}
+            {alert && (
+              <div className="mb-6">
+                <Alert
+                  type={alert.type}
                 message={alert.message}
                 onClose={() => setAlert(null)}
               />
@@ -271,6 +275,7 @@ const ProductPage = () => {
                 ))}
               </div>
             )}
+          </div>
           </div>
         </div>
       </div>

@@ -152,55 +152,60 @@ const DepartmentPage = () => {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <Sidebar />
       
-      <div className="flex-1 overflow-auto">
+      <div className="ml-64">
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b p-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Manajemen Department</h2>
+            <p className="text-gray-600">Kelola department dalam organisasi</p>
+          </div>
+        </div>
+
+        {/* Content */}
         <div className="w-full p-4 sm:p-6">
-          {/* Header */}
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">Manajemen Department</h1>
-            <p className="text-gray-600 mt-2">Kelola department dalam organisasi</p>
-          </div>
+          <div className="max-w-7xl mx-auto">
+            {/* Alert */}
+            {alert && (
+              <div className="mb-6">
+                <Alert
+                  type={alert.type}
+                  message={alert.message}
+                  onClose={() => setAlert(null)}
+                />
+              </div>
+            )}
 
-          {/* Alert */}
-          {alert && (
-            <div className="mb-6">
-              <Alert
-                type={alert.type}
-                message={alert.message}
-                onClose={() => setAlert(null)}
-              />
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              {statsData.map((stat, index) => (
+                <StatsCard key={index} {...stat} />
+              ))}
             </div>
-          )}
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            {statsData.map((stat, index) => (
-              <StatsCard key={index} {...stat} />
-            ))}
+            {/* Actions */}
+            <TableActions
+              searchValue={searchTerm}
+              onSearchChange={(e) => setSearchTerm(e.target.value)}
+              searchPlaceholder="Cari department..."
+              showFilter={false}
+              onAdd={() => setShowModal(true)}
+              addButtonText="Tambah Department"
+              addButtonIcon="➕"
+            />
+
+            {/* Department Table */}
+            <DataTable
+              data={filteredDepartments}
+              columns={createDepartmentTableColumns()}
+              loading={loading}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              emptyMessage="Tidak ada data department"
+            />
           </div>
-
-          {/* Actions */}
-          <TableActions
-            searchValue={searchTerm}
-            onSearchChange={(e) => setSearchTerm(e.target.value)}
-            searchPlaceholder="Cari department..."
-            showFilter={false}
-            onAdd={() => setShowModal(true)}
-            addButtonText="Tambah Department"
-            addButtonIcon="➕"
-          />
-
-          {/* Department Table */}
-          <DataTable
-            data={filteredDepartments}
-            columns={createDepartmentTableColumns()}
-            loading={loading}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            emptyMessage="Tidak ada data department"
-          />
         </div>
       </div>
 

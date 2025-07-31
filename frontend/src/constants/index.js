@@ -19,6 +19,7 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   USERS: '/dashboard/users',
   ADD_USER: '/pengguna/tambah',
+  ADD_EVENT: '/events/tambah',
   DEPARTMENT: '/dashboard/department',
   DIVISI: '/dashboard/divisi',
   KEUANGAN: '/dashboard/keuangan',
