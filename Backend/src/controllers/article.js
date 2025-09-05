@@ -2,6 +2,12 @@ import { articleService } from '../services/article.js';
 import { validationResult } from 'express-validator';
 import { prisma } from '../prisma/client.js';
 import fs from 'fs';
+import fetch from 'node-fetch';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const articleController = {
   async create(req, res, next) {
@@ -45,7 +51,12 @@ export const articleController = {
     try {
       const { page = 1, limit = 10, search = '' } = req.query;
       const result = await articleService.findAll({ page, limit, search });
-      res.json(result);
+      res.json({
+        success: true,
+        data: result.data || result,
+        total: result.total || 0,
+        message: 'Articles retrieved successfully'
+      });
     } catch (err) {
       next(err);
     }
@@ -241,6 +252,200 @@ export const articleController = {
 
     } catch (err) {
       next(err);
+    }
+  },
+
+  // Upload image untuk Editor.js
+  async uploadImage(req, res, next) {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          success: 0,
+          error: 'No file uploaded'
+        });
+      }
+
+      const file = req.file;
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const imageUrl = `${baseUrl}/uploads/${file.filename}`;
+
+      res.json({
+        success: 1,
+        data: {
+          url: imageUrl
+        }
+      });
+    } catch (error) {
+      console.error('Image upload error:', error);
+      res.status(500).json({
+        success: 0,
+        error: 'Failed to upload image'
+      });
+    }
+  },
+
+  // Fetch URL untuk Link Tool di Editor.js
+  async fetchUrl(req, res, next) {
+    try {
+      const { url } = req.body;
+
+      if (!url) {
+        return res.status(400).json({
+          success: 0,
+          error: 'URL is required'
+        });
+      }
+
+      try {
+        const response = await fetch(url);
+        const html = await response.text();
+
+        // Extract title dari HTML
+        const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+        const title = titleMatch ? titleMatch[1].trim() : 'No title';
+
+        // Extract description dari meta tag
+        const descriptionMatch = html.match(/<meta[^>]*name="description"[^>]*content="([^"]*)"[^>]*>/i) ||
+                                html.match(/<meta[^>]*property="og:description"[^>]*content="([^"]*)"[^>]*>/i);
+        const description = descriptionMatch ? descriptionMatch[1].trim() : '';
+
+        // Extract image dari meta tag
+        const imageMatch = html.match(/<meta[^>]*property="og:image"[^>]*content="([^"]*)"[^>]*>/i) ||
+                          html.match(/<meta[^>]*name="twitter:image"[^>]*content="([^"]*)"[^>]*>/i);
+        const image = imageMatch ? imageMatch[1].trim() : '';
+
+        res.json({
+          success: 1,
+          link: url,
+          meta: {
+            title,
+            description,
+            image: {
+              url: image
+            }
+          }
+        });
+      } catch (fetchError) {
+        console.error('Error fetching URL:', fetchError);
+        res.json({
+          success: 1,
+          link: url,
+          meta: {
+            title: url,
+            description: '',
+            image: {
+              url: ''
+            }
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Fetch URL error:', error);
+      res.status(500).json({
+        success: 0,
+        error: 'Failed to fetch URL'
+      });
+    }
+  },
+
+  // Get article statistics
+  async getStats(req, res) {
+    try {
+      const [
+        totalArticles,
+        publishedArticles,
+        draftArticles,
+        recentArticles,
+        articlesByCategory,
+        popularArticles
+      ] = await Promise.all([
+        // Total articles
+        prisma.article.count(),
+        
+        // Published articles
+        prisma.article.count({
+          where: { status: 'published' }
+        }),
+        
+        // Draft articles
+        prisma.article.count({
+          where: { status: 'draft' }
+        }),
+        
+        // Recent articles (last 7 days)
+        prisma.article.count({
+          where: {
+            createdAt: {
+              gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+            }
+          }
+        }),
+        
+        // Articles by category (if category field exists)
+        prisma.article.groupBy({
+          by: ['category'],
+          _count: {
+            category: true
+          },
+          where: {
+            category: {
+              not: null
+            }
+          }
+        }).catch(() => []), // Ignore error if category field doesn't exist
+        
+        // Most viewed articles (if views field exists)
+        prisma.article.findMany({
+          take: 5,
+          orderBy: {
+            createdAt: 'desc' // Use createdAt since views field might not exist
+          },
+          select: {
+            id: true,
+            title: true,
+            createdAt: true,
+            status: true
+          }
+        })
+      ]);
+
+      // Format categories
+      const categories = articlesByCategory.reduce((acc, curr) => {
+        acc[curr.category] = curr._count.category;
+        return acc;
+      }, {});
+
+      // Calculate growth percentage (mock calculation)
+      const growthPercentage = recentArticles > 0 ? Math.round((recentArticles / totalArticles) * 100) : 0;
+
+      const stats = {
+        totalArticles,
+        publishedArticles,
+        draftArticles,
+        recentArticles,
+        growthPercentage: `+${growthPercentage}%`,
+        categories,
+        popularArticles,
+        stats: {
+          total: totalArticles,
+          published: publishedArticles,
+          draft: draftArticles,
+          recent: recentArticles
+        }
+      };
+
+      res.json({
+        success: true,
+        data: stats,
+        message: 'Article statistics berhasil diambil'
+      });
+    } catch (error) {
+      console.error('Error getting article stats:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Gagal mengambil statistik artikel',
+        error: 'Internal Server Error'
+      });
     }
   }
 };

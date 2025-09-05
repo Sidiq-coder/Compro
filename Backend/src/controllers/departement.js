@@ -108,4 +108,21 @@ export const DepartmentController = {
       });
     }
   },
+
+  async getStats(req, res) {
+    try {
+      const stats = await DepartmentService.getStats();
+      res.json({
+        success: true,
+        data: stats,
+        message: 'Berhasil mendapatkan statistik departemen'
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: 'Internal Server Error'
+      });
+    }
+  }
 };

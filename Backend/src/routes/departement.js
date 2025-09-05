@@ -6,6 +6,7 @@ import { requireMinimumRole } from "../middlewares/role.js";
 const router = Router();
 
 // GET routes - tidak memerlukan autentikasi untuk public access
+router.get("/stats", authenticate, DepartmentController.getStats);
 router.get("/", DepartmentController.getAll);
 router.get("/:id", DepartmentController.getById);
 

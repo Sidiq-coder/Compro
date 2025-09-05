@@ -6,7 +6,8 @@ import {
   getEventDetails,
   updateEvent,
   deleteEvent,
-  exportAttendances
+  exportAttendances,
+  getEventStats
 } from '../controllers/event.js';
 import { authenticate } from '../middlewares/auth.js';
 import { authorizeEventManagement } from '../middlewares/event.js'
@@ -23,6 +24,7 @@ router.post(
   createEvent
 );
 
+router.get('/stats', authenticate, getEventStats);
 router.get('/', getEvents);
 router.get('/:id', getEventDetails);
 

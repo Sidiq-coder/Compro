@@ -28,6 +28,9 @@ export const ROUTES = {
   ABSENSI: '/dashboard/absensi',
   PENGATURAN: '/dashboard/pengaturan',
   ARTICLES: '/dashboard/articles', // Dashboard articles (for logged in users)
+  ARTICLE_MANAGEMENT: '/dashboard/articles',
+  ARTICLE_EDITOR: '/dashboard/articles/new',
+  ARTICLE_EDIT: '/dashboard/articles/edit/:id',
   EVENTS: '/dashboard/events', // Dashboard events (for logged in users)
   PROFILE: '/profile',
 };

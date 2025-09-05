@@ -6,7 +6,7 @@ import { formatDate } from '../utils';
 import { userService } from '../services/services';
 import { ROUTES } from '../constants';
 
-const UserManagementPage = () => {
+const UserManagement = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [stats, setStats] = useState({});
@@ -33,12 +33,6 @@ const UserManagementPage = () => {
   const loadUsers = async () => {
     try {
       setLoading(true);
-      console.log('Loading users with params:', { 
-        search: searchTerm, 
-        role: selectedRole, 
-        departmentId: selectedDepartment 
-      });
-      
       const response = await userService.getUsers({
         search: searchTerm,
         role: selectedRole,
@@ -47,29 +41,15 @@ const UserManagementPage = () => {
         limit: 50
       });
       
-      console.log('User service response:', response);
-      
       if (response.success) {
-        console.log('Users data:', response.data);
         setUsers(response.data.users || response.data || []);
       } else {
-        console.error('Response not successful:', response);
         setAlert({ type: 'error', message: 'Gagal memuat data pengguna' });
-        // Set mock data as fallback
-        setUsers([
-          { id: 1, name: 'Admin User', email: 'admin@example.com', role: 'admin', department: 'IT', division: 'Development', createdAt: '2024-01-15' },
-          { id: 2, name: 'Manager User', email: 'manager@example.com', role: 'ketua_departemen', department: 'HR', division: 'Recruitment', createdAt: '2024-02-10' },
-        ]);
       }
     } catch (error) {
       console.error('Load users error:', error);
       setAlert({ type: 'error', message: 'Gagal memuat data pengguna: ' + error.message });
-      // Set mock data as fallback
-      setUsers([
-        { id: 1, name: 'Admin User', email: 'admin@example.com', role: 'admin', department: 'IT', division: 'Development', createdAt: '2024-01-15' },
-        { id: 2, name: 'Manager User', email: 'manager@example.com', role: 'ketua_departemen', department: 'HR', division: 'Recruitment', createdAt: '2024-02-10' },
-        { id: 3, name: 'Staff User', email: 'staff@example.com', role: 'pengurus', department: 'Finance', division: 'Accounting', createdAt: '2024-03-05' },
-      ]);
+      setUsers([]);
     } finally {
       setLoading(false);
     }
@@ -339,4 +319,4 @@ const UserManagementPage = () => {
   );
 };
 
-export default UserManagementPage;
+export default UserManagement;

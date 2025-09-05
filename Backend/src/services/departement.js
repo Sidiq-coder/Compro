@@ -168,4 +168,44 @@ export const DepartmentService = {
       throw new Error(`Gagal menghapus departemen: ${error.message}`);
     }
   },
+
+  async getStats() {
+    try {
+      const totalDepartments = await prisma.department.count();
+      
+      const totalEmployees = await prisma.user.count();
+      
+      // Find department with most employees
+      const departmentWithMostEmployees = await prisma.department.findFirst({
+        include: {
+          _count: {
+            select: {
+              users: true
+            }
+          }
+        },
+        orderBy: {
+          users: {
+            _count: 'desc'
+          }
+        }
+      });
+
+      const largestDepartmentSize = departmentWithMostEmployees?._count?.users || 0;
+      const averageEmployeesPerDept = totalDepartments > 0 ? Math.round(totalEmployees / totalDepartments) : 0;
+
+      // Mock growth percentage for now
+      const growthPercentage = '+5%';
+
+      return {
+        totalDepartments,
+        totalEmployees,
+        largestDepartmentSize,
+        averageEmployeesPerDept,
+        growthPercentage
+      };
+    } catch (error) {
+      throw new Error(`Gagal mengambil statistik departemen: ${error.message}`);
+    }
+  }
 };

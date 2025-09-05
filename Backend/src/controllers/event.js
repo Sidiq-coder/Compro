@@ -4,7 +4,8 @@ import {
   getEventByIdService,
   updateEventService,
   deleteEventService,
-  exportEventAttendancesService
+  exportEventAttendancesService,
+  getEventStatsService
 } from '../services/event.js';
 
 export const createEvent = async (req, res) => {
@@ -94,6 +95,21 @@ export const exportAttendances = async (req, res) => {
 
     await workbook.xlsx.write(res);
     res.end();
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+export const getEventStats = async (req, res) => {
+  try {
+    const stats = await getEventStatsService();
+    res.json({
+      success: true,
+      data: stats
+    });
   } catch (error) {
     res.status(500).json({
       success: false,

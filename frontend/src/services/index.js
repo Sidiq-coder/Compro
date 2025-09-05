@@ -1,4 +1,7 @@
 import { api } from './api';
+import dashboardService from './dashboardService';
+
+export { dashboardService };
 
 /**
  * Authentication service
@@ -185,3 +188,8 @@ export const contactService = {
  * Exporting eventService
  */
 export { eventService } from './eventService';
+
+/**
+ * Exporting product, order, and finance services
+ */
+export { productService, orderService, financeService } from './productService';

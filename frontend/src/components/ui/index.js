@@ -29,3 +29,4 @@ export { DateInput } from './DateInput';
 export { Checkbox } from './Checkbox';
 export { PermissionCard } from './PermissionCard';
 export { default as HeroHeader, CompactHero } from './HeroHeader';
+export { default as RichEditor } from './RichEditor';

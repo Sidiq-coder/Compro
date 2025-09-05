@@ -5,3 +5,5 @@ node_modules
 uploads/
 *.rest
 /prisma/migrations
+seed-*.js
+create-admin.js

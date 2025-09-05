@@ -228,3 +228,88 @@ export const getManageableRoles = (managerRole) => {
     return roleLevel < managerLevel;
   });
 };
+
+export const getUserStats = async () => {
+  try {
+    // First get basic counts
+    const totalUsers = await prisma.user.count();
+    
+    // Active users (users who logged in within last 30 days)
+    const activeUsers = await prisma.user.count({
+      where: {
+        lastLoginAt: {
+          gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+        }
+      }
+    });
+
+    // Users by role
+    const usersByRole = await prisma.user.groupBy({
+      by: ['role'],
+      _count: {
+        role: true
+      }
+    });
+
+    // Simple approach for recent users - get users with highest IDs as proxy
+    const maxUser = await prisma.user.findFirst({
+      select: { id: true },
+      orderBy: { id: 'desc' }
+    });
+
+    const recentUsers = maxUser ? await prisma.user.count({
+      where: {
+        id: {
+          gt: Math.max(1, maxUser.id - 10) // Last 10 users created
+        }
+      }
+    }) : 0;
+
+    // Users by department
+    const usersByDepartment = await prisma.user.groupBy({
+      by: ['departmentId'],
+      _count: {
+        departmentId: true
+      },
+      where: {
+        departmentId: {
+          not: null
+        }
+      }
+    });
+
+    // Format users by role
+    const roleStats = usersByRole.reduce((acc, curr) => {
+      acc[curr.role] = curr._count.role;
+      return acc;
+    }, {});
+
+    // Calculate growth percentage (mock calculation)
+    const growthPercentage = totalUsers > 0 ? Math.round((recentUsers / totalUsers) * 100) : 0;
+
+    const result = {
+      totalUsers,
+      activeUsers,
+      recentUsers,
+      adminUsers: roleStats.admin || 0,
+      growthPercentage: `+${growthPercentage}%`,
+      usersByRole: roleStats,
+      usersByDepartment: usersByDepartment.length,
+      stats: {
+        admin: roleStats.admin || 0,
+        ketua_umum: roleStats.ketua_umum || 0,
+        ketua_departemen: roleStats.ketua_departemen || 0,
+        ketua_divisi: roleStats.ketua_divisi || 0,
+        sekretaris: roleStats.sekretaris || 0,
+        bendahara: roleStats.bendahara || 0,
+        pengurus: roleStats.pengurus || 0,
+        anggota: roleStats.anggota || 0
+      }
+    };
+    
+    return result;
+  } catch (error) {
+    console.error('Error getting user stats:', error);
+    throw new Error(`Gagal mengambil statistik user: ${error.message}`);
+  }
+};

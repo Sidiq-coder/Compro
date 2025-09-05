@@ -16,6 +16,10 @@ import authRoutes from './routes/auth.js';
 import articleRoutes from './routes/article.js';
 import eventRoutes from './routes/event.js';
 import attendanceRoutes from './routes/attendance.js';
+import productRoutes from './routes/product.js';
+import orderRoutes from './routes/order.js';
+import financeRoutes from './routes/finance.js';
+import dashboardRoutes from './routes/dashboard.js';
 
 
 const app = express();
@@ -26,6 +30,9 @@ app.use(morgan('dev'));
 app.use(cookieParser()); // Add cookie parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Serve static files from uploads directory
+app.use('/uploads', express.static('uploads'));
 
 app.use(apiLimiter);
 app.use(requestLogger);
@@ -40,6 +47,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/articles', articleRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/attendances', attendanceRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/finance', financeRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 
 app.use(notFound);

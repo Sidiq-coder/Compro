@@ -123,10 +123,13 @@ model Product {
   description String
   price       Float
   stock       Int
+  category    String   @default("General")
   imageUrl    String
   createdBy   User     @relation(fields: [createdById], references: [id])
   createdById Int
   orders      Order[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Order {

@@ -117,3 +117,23 @@ export const deleteUser = async (req, res) => {
     });
   }
 };
+
+export const getUserStats = async (req, res) => {
+  try {
+    console.log('Controller getUserStats called');
+    const stats = await userService.getUserStats();
+    console.log('Controller getUserStats result:', stats);
+    res.json({
+      success: true,
+      data: stats,
+      message: 'User statistics berhasil diambil'
+    });
+  } catch (error) {
+    console.error('Error getting user stats controller:', error);
+    res.status(500).json({
+      success: false,
+      message: `Gagal mengambil statistik user: ${error.message}`,
+      error: 'Internal Server Error'
+    });
+  }
+};

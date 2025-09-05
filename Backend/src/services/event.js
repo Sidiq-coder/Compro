@@ -130,3 +130,44 @@ export const exportEventAttendancesService = async (eventId) => {
 
   return generateExcel(attendances);
 };
+
+export const getEventStatsService = async () => {
+  const today = new Date();
+  const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+
+  const totalEvents = await prisma.event.count();
+  
+  const upcomingEvents = await prisma.event.count({
+    where: {
+      startTime: { gte: today }
+    }
+  });
+
+  const thisMonthEvents = await prisma.event.count({
+    where: {
+      startTime: {
+        gte: thisMonth,
+        lt: nextMonth
+      }
+    }
+  });
+
+  // Calculate total participants from attendance records
+  const totalParticipants = await prisma.attendance.count({
+    where: {
+      status: 'present'
+    }
+  });
+
+  // Calculate growth percentage (mock for now)
+  const growthPercentage = '+10%';
+
+  return {
+    totalEvents,
+    upcomingEvents,
+    thisMonthEvents,
+    totalParticipants,
+    growthPercentage
+  };
+};

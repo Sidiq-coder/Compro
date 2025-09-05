@@ -8,6 +8,8 @@ import { createUserSchema, updateUserSchema } from '../schema/user.js';
 const router = express.Router();
 
 // GET routes - tidak memerlukan autentikasi untuk public access
+// Stats route harus ditempatkan sebelum /:id route untuk menghindari conflict
+router.get('/stats', authenticate, UserController.getUserStats);
 router.get('/', roleBasedFilter, UserController.getUsers);
 router.get('/:id', UserController.getUserById);
 
